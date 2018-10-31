@@ -1,12 +1,60 @@
-# StoryForge
 ﻿define e = Character("")
 
-screen foyer_imagemap:
-    add "foyer_lights_on"
+screen foyerimagemap:
+    add "foyerlightson"
+    add "minimapfoyer" at topright
 
-    imagebutton idle "dot" hover "vcue_door" xpos 177 ypos 349 clicked Return ("clro")
-    imagebutton idle "dot" hover "vcue_door" xpos 678 ypos 346 clicked Return ("dralo")
-    imagebutton idle "dot" hover "vcue_door" xpos 508 ypos 352 clicked Return ("bb")
+
+    imagebutton idle "vcuestar" hover "vcuedoor" xpos 151 ypos 320 clicked Return ("clro")
+    imagebutton idle "vcuestar" hover "vcuedoor" xpos 501 ypos 337 clicked Return ("bb")
+    imagebutton idle "vcuestar" hover "vcuedoor" xpos 677 ypos 341 clicked Return ("dralo")
+    imagebutton idle "vcuestar" hover "vcuedoor" xpos 1072 ypos 320 clicked Return ("llo")
+    #interact with clock
+
+screen livingimagemap:
+    add "livinglightson"
+    add "minimaplivingroom" at topright
+
+    imagebutton idle "vcuestar" hover "vcuering" xpos 420 ypos 351 clicked Return ("lamp")
+    imagebutton idle "vcuestar" hover "vcuedoor" xpos 586 ypos 336 clicked Return ("sl")
+
+screen diningroomimagemap:
+    add "dininglightson"
+    add "minimapdiningroom" at topright
+
+    imagebutton idle "vcuestar" hover "vcuedoor" xpos 28 ypos 545 clicked Return ("bl")
+    imagebutton idle "vcuestar" hover "vcuedoor" xpos 409 ypos 338 clicked Return ("kl")
+    imagebutton idle "vcuestar" hover "vcuedoor" xpos 885 ypos 337 clicked Return ("sl")
+
+
+screen childsroomimagemap:
+    add "childsroomlightson"
+    add "minimapchildsroom" at topright
+
+    imagebutton idle "vcuestar" hover "vcuedoor" xpos 1017 ypos 338 clicked Return ("bl")
+
+screen bathroomimagemap:
+    add "bathroomlights"
+    add "minimapbathroom" at topright
+
+    imagebutton idle "vcuestar" hover "vcuedoor" xpos 586 ypos 324 clicked Return ("mblo")
+    imagebutton idle "vcuestar" hover "vcuedoor" xpos 746 ypos 330 clicked Return ("drlo")
+
+screen masterbedroomimagemap:
+    add "masterbedroomlights"
+    add "minimapmasterbedroom" at topright
+
+    imagebutton idle "vcuestar" hover "vcuedoor" xpos 1017 ypos 338 clicked Return ("mblo")
+
+screen kitchenimagemap:
+    add "kitchenlights"
+    add "minimapkitchen" at topright
+
+    imagebutton idle "vcuestar" hover "vcuedoor" xpos 1017 ypos 338 clicked Return ("mblo")
+
+screen garageimagemap:
+    add "garagelights"
+    add "minimapgarage" at topright
 
 label start:
 
@@ -14,14 +62,14 @@ label start:
 
     e "You are out on a stroll with Wick, a Golden Retriever, who has been your
       faithful companion for 8 years."
-      
-    #show wick
-    
+
+    show wick
+
     e "Out of the blue, he appears agitated and begins frantically pacing about.
     Before you can attempt to console him, he dashes off,"
     e "heading straight into a grove."
-    
-    #hide wick
+
+    hide wick
     #show you
 
     e "You give chase, desperately trying to keep up,
@@ -59,12 +107,12 @@ label start:
        name at the top of your lungs, but you are met with an eerie silence.
        It finally registers that you can't even see your own feet."
 
-    scene foyer_lights_off
+    scene foyerlightsoff
 
     e "You pull out your handy iPhone and switch on the flashlight app
        for some illumination."
 
-    scene foyer_lights_on
+    scene foyerlightson
 
     e  "You examine your surroundings to discover the interior is as rundown
         as its exterior, and you catch a whiff of the stale air."
@@ -77,26 +125,114 @@ label start:
         to resist it. You decide it doesn't matter, since you will not
         be leaving this house without your dog."
 
+    e  "You hear something familiar yet faint in the dark. You spin around, “WICK!”"
+
+    e  "Your eyes dart around what appears to be a foyer. Your heart is pounding
+        as you take your first step forward into the darkness.
+        You need to explore this house. You need to find your dog."
 
 label foyer :
-    call screen foyer_imagemap
-
+    call screen foyerimagemap
     $ result = _return
     if result == "bb" :
          e "ugh it wont budge!"
          jump foyer
 
     if result == "clro" :
-     scene childs_room_lights_on
-     e "test"
+        scene childsroomlightson
+        with fade
+        jump childsroom
 
     if result == "dralo" :
-     scene dining_room_all_lights_on
-     e "test"
+          scene dininglightson
+          with fade
+          jump diningroom
 
+    if result == "llo" :
+        scene livinglightson
+        with fade
+        jump livingroom
 
+label livingroom :
+    call screen livingimagemap
+    $ result = _return
 
+    if result == "lamp" :
+        e "the power is out!"
+        jump livingroom
 
-    e "test"
+    if result == "sl" :
+        e "its locked"
+        jump livingroom
+
+label childsroom :
+    call screen childsroomimagemap
+    $ result = _return
+
+    if result == "bl" :
+        scene bathroomlights
+        with fade
+        jump bathroom
+
+label bathroom :
+    call screen bathroomimagemap
+    $ result = _return
+
+    if result == "mblo" :
+         scene masterbedroomlights
+         with fade
+         jump masterbedroom
+
+    if result == "drlo" :
+        scene dininglightson
+        with fade
+        jump diningroom
+
+label diningroom :
+    call screen diningroomimagemap
+    $ result = _return
+
+    if result == "sl" :
+        e "its locked"
+        jump diningroom
+
+    if result == "kl" :
+        scene kitchenlights
+        with fade
+        jump kitchen
+
+    if result == "bl" :
+        scene bathroomlights
+        with fade
+        jump bathroom
+
+label masterbedroom :
+    call screen masterbedroomimagemap
+    $ result = _return
+
+    if result == "kl" :
+        scene kitchenlights
+        with fade
+        jump kitchen
+
+label kitchen :
+    call screen kitchenimagemap
+    $ result = _return
+
+    if result == "gl" :
+        scene garagelights
+        with fade
+        jump garage
+
+label garage :
+    call screen garageimagemap
+    $ result = _return
+
+    e " Test end of script "
+
+    e "fin"
+
+#label study :
+
 
     return
